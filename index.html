@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b9071d">
+<meta name="application-name" content="75days">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="75days">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<title>چالش ۷۵ روز تعهد به خودت</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#fbf6f4;--card:#ffffff;--ink:#2b2227;--mute:#7d6e76;--acc:#d6416b;--line:#efe3e7;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171216;--card:#231b21;--ink:#f4eaee;--mute:#a99aa3;--acc:#f0708f;--line:#352a31;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#171216;--card:#231b21;--ink:#f4eaee;--mute:#a99aa3;--acc:#f0708f;--line:#352a31;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Vazirmatn,Tahoma,system-ui,sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:520px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:22px;font-weight:800;margin:6px 0 2px}
+.sub{color:var(--mute);font-size:13px;margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.big{font-size:20px;font-weight:800}
+.mute{color:var(--mute);font-size:13px}
+.stats{display:flex;gap:8px;margin-bottom:12px}
+.stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center}
+.stat b{display:block;font-size:20px;color:var(--acc)}
+.stat span{font-size:12px;color:var(--mute)}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:10px 0 2px}
+.bar i{display:block;height:100%;background:var(--acc);border-radius:99px}
+.task{display:flex;gap:12px;align-items:center;width:100%;min-height:56px;padding:8px 4px;background:none;border:0;border-top:1px solid var(--line);color:inherit;font:inherit;text-align:right;cursor:pointer}
+.task:first-of-type{border-top:0}
+.task:disabled{opacity:.5;cursor:default}
+.box{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--acc);display:grid;place-items:center;color:#fff;font-size:15px}
+.task[aria-checked="true"] .box{background:var(--acc)}
+.task[aria-checked="true"] .t{text-decoration:line-through;opacity:.65}
+.t{font-weight:600;font-size:15px}
+.t small{display:block;font-weight:400;color:var(--mute);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.cell{aspect-ratio:1;border-radius:8px;border:1px solid var(--line);font:inherit;font-size:11px;color:var(--ink);cursor:pointer;padding:0;background:color-mix(in srgb,var(--acc) calc(var(--l)*22%),var(--card))}
+.cell[data-l="4"]{color:#fff}
+.cell.sel{outline:2px solid var(--ink);outline-offset:1px}
+.cell.today{border:2px solid var(--acc)}
+button.pill{min-height:44px;padding:0 16px;border-radius:12px;border:0;background:var(--acc);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+button.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+input[type=date]{min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;padding:0 10px}
+.nav{display:flex;gap:8px}
+.nav button{min-height:44px;min-width:44px}
+ul{margin:6px 0 0;padding-inline-start:18px;font-size:13px;color:var(--mute)}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🔥 چالش ۷۵ روز تعهد به خودت</h1>
+  <p class="sub">هر روز به قولی که به خودت دادی وفادار بمان.</p>
+
+  <div id="setup" class="card hide">
+    <div class="big">از کی شروع می‌کنی؟</div>
+    <p class="mute">تاریخ شروع رو انتخاب کن تا شمارش روزها ساخته بشه.</p>
+    <div class="row">
+      <input type="date" id="startInput" aria-label="تاریخ شروع">
+      <button class="pill" id="startBtn">شروع چالش</button>
+    </div>
+    <p class="mute" id="startFa"></p>
+  </div>
+
+  <div id="main" class="hide">
+    <div class="stats">
+      <div class="stat"><b id="sDone">۰</b><span>روز کامل</span></div>
+      <div class="stat"><b id="sStreak">۰</b><span>رکورد پیاپی</span></div>
+      <div class="stat"><b id="sLeft">۷۵</b><span>روز مانده</span></div>
+    </div>
+    <div class="bar" aria-hidden="true"><i id="barFill" style="width:0%"></i></div>
+    <p class="mute" id="barTxt"></p>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="big" id="dayTitle"></div>
+          <div class="mute" id="dayDate"></div>
+        </div>
+        <div class="nav">
+          <button class="pill ghost" id="nextBtn" aria-label="روز بعد">→</button>
+          <button class="pill ghost" id="prevBtn" aria-label="روز قبل">←</button>
+        </div>
+      </div>
+      <p class="mute" id="lockMsg"></p>
+      <div id="tasks"></div>
+    </div>
+
+    <div class="card">
+      <div class="big" style="font-size:16px;margin-bottom:8px">نقشه ۷۵ روز</div>
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <div class="card">
+      <div class="big" style="font-size:16px">یادآوری‌های پیشنهادی</div>
+      <ul>
+        <li>۸ صبح: ۴۵ دقیقه تمرین</li>
+        <li>۱۰ صبح و ۲ بعدازظهر: آب خوردن</li>
+        <li>۱۱ شب: ۱۰ صفحه مطالعه و ثبت عکس و گزارش</li>
+      </ul>
+      <p class="mute">این ساعت‌ها رو توی اپ Reminders یا Clock گوشی خودت تنظیم کن.</p>
+    </div>
+
+    <div class="row">
+      <button class="pill ghost" id="changeBtn">تغییر تاریخ شروع</button>
+    </div>
+  </div>
+
+  <p class="mute" style="margin-top:18px">پیشرفتت فقط روی همین گوشی ذخیره می‌شه. برای دسترسی سریع‌تر: دکمه Share در Safari ← Add to Home Screen.</p>
+</div>
+
+<script>
+(function(){
+var K='c75v1';
+var TASKS=[
+ ['🏋️‍♀️','ورزش روزانه','حداقل ۴۵ دقیقه فعالیت بدنی'],
+ ['💧','آب کافی','۲ لیتر در طول روز'],
+ ['📚','رشد فردی','۱۰ صفحه کتاب یا ۱۵ دقیقه مطالعه'],
+ ['🧠','ثبت عکس و گزارش','خواب منظم، مسئولیت‌های روزانه، گزارش عملکرد']
+];
+var S={start:null,done:{}};
+try{var r=localStorage.getItem(K);if(r){var p=JSON.parse(r);if(p&&typeof p==='object'){S.start=p.start||null;S.done=p.done||{};}}}catch(e){}
+function save(){try{localStorage.setItem(K,JSON.stringify(S));}catch(e){}}
+function $(id){return document.getElementById(id);}
+function fa(n){try{return Number(n).toLocaleString('fa-IR');}catch(e){return String(n);}}
+function parse(s){var a=s.split('-').map(Number);return new Date(a[0],a[1]-1,a[2]);}
+function iso(d){var m=d.getMonth()+1,x=d.getDate();return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(x<10?'0':'')+x;}
+function addDays(d,n){return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);}
+function faDate(d){try{return new Intl.DateTimeFormat('fa-IR-u-ca-persian',{weekday:'long',day:'numeric',month:'long'}).format(d);}catch(e){return iso(d);}}
+function todayIdx(){if(!S.start)return 0;var t=new Date();var t0=new Date(t.getFullYear(),t.getMonth(),t.getDate());return Math.round((t0-parse(S.start))/864e5)+1;}
+function cnt(d){var a=S.done[d]||[];var c=0;for(var i=0;i<a.length;i++)if(a[i])c++;return c;}
+var sel=1,editing=false;
+
+function stats(){
+  var done=0,i;
+  for(i=1;i<=75;i++)if(cnt(i)===4)done++;
+  var t=Math.min(todayIdx(),75),streak=0;
+  if(t>=1){var j=t;if(cnt(j)!==4)j--;while(j>=1&&cnt(j)===4){streak++;j--;}}
+  return {done:done,streak:streak};
+}
+
+function render(){
+  var showSetup=!S.start||editing;
+  $('setup').classList.toggle('hide',!showSetup);
+  $('main').classList.toggle('hide',!S.start);
+  if(showSetup){
+    if(!$('startInput').value)$('startInput').value=S.start||iso(new Date());
+    $('startFa').textContent=faDate(parse($('startInput').value));
+  }
+  if(!S.start)return;
+  var st=stats(),t=todayIdx();
+  $('sDone').textContent=fa(st.done);
+  $('sStreak').textContent=fa(st.streak);
+  $('sLeft').textContent=fa(75-st.done);
+  $('barFill').style.width=(st.done/75*100)+'%';
+  $('barTxt').textContent=t<1?'چالش از '+faDate(parse(S.start))+' شروع می‌شه.':(t>75?'۷۵ روز تموم شد، آفرین! 🎉':'امروز روز '+fa(t)+' از ۷۵ است.');
+  var date=addDays(parse(S.start),sel-1);
+  $('dayTitle').textContent='روز '+fa(sel)+' از ۷۵';
+  $('dayDate').textContent=faDate(date);
+  $('prevBtn').disabled=sel<=1;
+  $('nextBtn').disabled=sel>=75;
+  var locked=sel>t;
+  $('lockMsg').textContent=locked?'این روز هنوز نرسیده، فقط روزهای گذشته و امروز قابل ثبت هستن.':'';
+  var a=S.done[sel]||[false,false,false,false];
+  var box=$('tasks');box.innerHTML='';
+  TASKS.forEach(function(k,i){
+    var b=document.createElement('button');
+    b.className='task';b.setAttribute('role','checkbox');
+    b.setAttribute('aria-checked',a[i]?'true':'false');
+    b.disabled=locked;
+    b.innerHTML='<span class="box">'+(a[i]?'✓':'')+'</span><span class="t">'+k[0]+' '+k[1]+'<small>'+k[2]+'</small></span>';
+    b.addEventListener('click',function(){
+      var n=(S.done[sel]||[false,false,false,false]).slice();
+      n[i]=!n[i];S.done[sel]=n;save();render();
+    });
+    box.appendChild(b);
+  });
+  var g=$('grid');g.innerHTML='';
+  for(var d=1;d<=75;d++){(function(d){
+    var c=document.createElement('button');
+    c.className='cell'+(d===sel?' sel':'')+(d===t?' today':'');
+    c.style.setProperty('--l',cnt(d));
+    c.setAttribute('data-l',cnt(d));
+    c.setAttribute('aria-label','روز '+fa(d));
+    c.textContent=fa(d);
+    c.addEventListener('click',function(){sel=d;render();});
+    g.appendChild(c);
+  })(d);}
+}
+
+$('startInput').addEventListener('input',function(){
+  var v=$('startInput').value;if(v)$('startFa').textContent=faDate(parse(v));
+});
+$('startBtn').addEventListener('click',function(){
+  var v=$('startInput').value;if(!v)return;
+  S.start=v;editing=false;save();
+  var t=todayIdx();sel=Math.max(1,Math.min(t,75));render();
+});
+$('changeBtn').addEventListener('click',function(){editing=true;$('startInput').value=S.start;render();});
+$('prevBtn').addEventListener('click',function(){if(sel>1){sel--;render();}});
+$('nextBtn').addEventListener('click',function(){if(sel<75){sel++;render();}});
+
+if(S.start){sel=Math.max(1,Math.min(todayIdx(),75));}
+render();
+})();
+</script>
+<script>
+if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
+  window.addEventListener('load',function(){try{navigator.serviceWorker.register('sw.js');}catch(e){}});
+}
+</script>
+</body>
+</html>
